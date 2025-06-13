@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Task Tracker</title>
+</head>
+<body>
+    <h1>Task Tracker</h1>
+
+    <!-- Form to add a task -->
+    <form th:action="@{/tasks/web}" method="post" th:object="${task}">
+        <input type="text" th:field="*{title}" placeholder="Title" required />
+        <input type="text" th:field="*{description}" placeholder="Description" required />
+        <button type="submit">Add Task</button>
+    </form>
+
+    <!-- List of tasks -->
+    <ul>
+        <li th:each="task : ${tasks}">
+            <b th:text="${task.title}">Title</b> -
+            <span th:text="${task.description}">Description</span>
+
+            <!-- Delete button -->
+            <form th:action="@{/tasks/web/{id}(id=${task.id})}" method="post">
+                <input type="hidden" name="_method" value="delete" />
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    </ul>
+</body>
+</html>
