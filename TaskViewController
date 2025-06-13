@@ -1,0 +1,38 @@
+package com.example.tasktrackerv2.controller;
+
+import com.example.tasktrackerv2.model.Task;
+import com.example.tasktrackerv2.service.TaskService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+public class TaskViewController {
+
+    private final TaskService taskService;
+
+    public TaskViewController(TaskService taskService) {
+        this.taskService = taskService;
+    }
+
+    @GetMapping("/")
+    public String index(Model model) {
+        model.addAttribute("tasks", taskService.getAllTasks());
+        model.addAttribute("task", new Task());
+        return "tasks";
+    }
+
+    // Changed path to avoid conflict with API layer
+    @PostMapping("/tasks/web")
+    public String addTask(Task task) {
+        taskService.createTask(task);
+        return "redirect:/";
+    }
+
+    // Changed to DELETE here using web prefix
+    @DeleteMapping("/tasks/web/{id}")
+    public String deleteTask(@PathVariable Long id) {
+        taskService.deleteTask(id);
+        return "redirect:/";
+    }
+}
